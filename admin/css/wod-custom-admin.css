@@ -1,0 +1,10 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+ .bp-navs{
+    background-color: blueviolet;
+}
+div .buddypress-wrap .profile.edit .editfield.field_type_wod-skills_cb {
+    background-color: aquamarine;
+}

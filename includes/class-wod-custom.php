@@ -182,6 +182,8 @@ class Wod_Custom {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_filter( 'bp_xprofile_get_field_types', $plugin_public, 'wod_get_field_types' );
 		$this->loader->add_action( 'xprofile_data_before_save', $plugin_public, 'wod_xprofile_data_before_save' );
+		$this->loader->add_shortcode( "members-list", $plugin_public, "create_member_list", $priority = 10, $accepted_args = 2 );
+		$this->loader->add_filter( 'bp_before_has_members_parse_args', $plugin_public, 'wod_before_has_members_parse_args_func' );
 		
 
 	}

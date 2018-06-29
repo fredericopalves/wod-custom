@@ -107,11 +107,7 @@ class Wod_Custom_Public {
 // fred
 private $bxcft_field_types = array(
 
-	'wod-skills_cb'                 => 'BP_XProfile_Field_Type_Checkbox_Skills',
-
-
-
-);
+	'wod-skills_cb'                 => 'BP_XProfile_Field_Type_Checkbox_Skills',);
 
 	public function wod_get_field_types($fields)
 	{
@@ -142,5 +138,85 @@ private $bxcft_field_types = array(
 		}
 		
 		
+	}
+
+	public function buddypress_return_members() {
+		return 'members';
+	}
+
+	function my_custom_ids( $field_name, $field_value = '' ) {
+  
+		if ( empty( $field_name ) )
+		  return '';
+		
+		global $wpdb;
+		
+		$field_id = xprofile_get_field_id_from_name( $field_name ); 
+	   
+		if ( !empty( $field_id ) ) 
+		  $query = "SELECT user_id FROM " . $wpdb->prefix . "bp_xprofile_data WHERE field_id = " . $field_id;
+		else
+		 return '';
+		
+		if ( $field_value != '' ) 
+		  $query .= " AND value LIKE '%" . $field_value . "%'";
+			/* 
+			LIKE is slow. If you're sure the value has not been serialized, you can do this:
+			$query .= " AND value = '" . $field_value . "'";
+			*/
+		
+		$custom_ids = $wpdb->get_col( $query );
+		
+		if ( !empty( $custom_ids ) ) {
+		  // convert the array to a csv string
+		  $custom_ids_str = implode(",", $custom_ids);
+		  return $custom_ids_str;
+		}
+		else
+		 return '';
+		 
+		}
+
+	public function create_member_list(){
+
+		add_filter( 'bp_current_component', array($this,'buddypress_return_members') );
+		add_filter( 'bp_is_current_component', '__return_true' );
+		add_filter( 'bp_is_directory', '__return_true' );
+	
+		if ( 'nouveau' === bp_get_theme_compat_id() ) {
+			$bp_nouveau = bp_nouveau();
+			// Set Up Nav.
+			$bp_nouveau->setup_directory_nav();
+			// Buffer the Members directory
+			$members = $bp_nouveau->theme_compat_wrapper( bp_buffer_template_part(
+				'members/index',
+				null,
+				false
+			) );
+		} else {
+			$members = bp_buffer_template_part(
+				'members/index',
+				null,
+				false
+			);
+		}
+		remove_filter( 'bp_current_component', 'buddypress_return_members' );
+		remove_filter( 'bp_is_current_component', '__return_true' );
+		remove_filter( 'bp_is_directory', '__return_true' );
+	
+		return $members;
+	}
+
+	public function wod_before_has_members_parse_args_func($retval){
+		$mentor_page_name="mentors";//@Todo: remove hardcode
+
+if(basename($_SERVER['HTTP_REFERER'])==$mentor_page_name) 
+	{
+$retval['include']=$this->my_custom_ids( 'I want to be a mentor', 'YES' ); //@Todo: remove hardcode
+
+}
+return $retval;
+
+
 	}
 }

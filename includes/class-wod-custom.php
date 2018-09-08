@@ -184,6 +184,7 @@ class Wod_Custom {
 		$this->loader->add_action( 'xprofile_data_before_save', $plugin_public, 'wod_xprofile_data_before_save' );
 		$this->loader->add_shortcode( "members-list", $plugin_public, "create_member_list", $priority = 10, $accepted_args = 2 );
 		$this->loader->add_filter( 'bp_before_has_members_parse_args', $plugin_public, 'wod_before_has_members_parse_args_func' );
+		$this->loader->add_action( 'bp_directory_members_item', $plugin_public, 'wod_add_mentor_message_on_member_directory'); 
 		
 
 	}

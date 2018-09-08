@@ -105,6 +105,21 @@ class Wod_Custom_Public {
 
 	}
 // fred
+
+/*
+	Adds a paragraph to each member in the members directory if she/he has set the "I want to be a member" to "Yes"
+	*/
+	function wod_add_mentor_message_on_member_directory(){
+		$dmember_id = bp_get_member_user_id();
+		$ismentor= xprofile_get_field_data( 'I want to be a mentor' , $dmember_id);
+		if ($ismentor=="YES"){ 
+			echo "<p><i class='fas fa-hands-helping'></i> I can be your mentor ! </p>";
+		}
+		
+	}
+
+
+
 private $bxcft_field_types = array(
 
 	'wod-skills_cb'                 => 'BP_XProfile_Field_Type_Checkbox_Skills',);
